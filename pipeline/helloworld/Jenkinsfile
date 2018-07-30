@@ -1,0 +1,22 @@
+#!/usr/bin/env groovy
+
+echo("hello jenkins pipeline world!!!")
+
+pipeline {
+    agent any
+
+    options {
+        ansiColor('xterm')
+    }
+
+    stages {
+        stage('test install') {
+            steps {
+                script {
+                    sh "sudo apt-get -y install python-pip"
+                    sh "sudo pip install --retries=20 --timeout=3000 awscli"
+                }
+            }
+        }
+    }
+}
