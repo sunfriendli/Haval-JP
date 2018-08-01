@@ -5,10 +5,6 @@ echo("hello jenkins pipeline world!!!")
 pipeline {
     agent any
 
-    options {
-        ansiColor('xterm')
-    }
-
     stages {
         stage('test install') {
             steps {
