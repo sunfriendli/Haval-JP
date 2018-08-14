@@ -37,19 +37,17 @@ pipeline {
                     def packerCredential = createAMIWithPacker.getPackerCredential(conf, region)
                     assert packerCredential
 
-                    withAWS(credentials: packerCredential, region: region) {
-                        def findLatestAmi = '~/.local/bin/./aws ec2 describe-images --filters'
-                        filterParams.each {
-                            k, v -> findLatestAmi = "${findLatestAmi} \"Name=${k},Values=${v}\" "
-                        }
-                        findLatestAmi= "${findLatestAmi} --query \'Images[*].[ImageId,CreationDate]\' --output text | sort -k2 -r | head -n1 | cut -f 1"
-                        echo "Filters: ${findLatestAmi}"
+                    def findLatestAmi = '~/.local/bin/./aws ec2 describe-images --filters'
+                    filterParams.each {
+                        k, v -> findLatestAmi = "${findLatestAmi} \"Name=${k},Values=${v}\" "
+                    }
+                    findLatestAmi= "${findLatestAmi} --query \'Images[*].[ImageId,CreationDate]\' --output text | sort -k2 -r | head -n1 | cut -f 1"
+                    echo "Filters: ${findLatestAmi}"
 
-                        withAWSCli() {
-                            sourceAmiId = sh(script: "${findLatestAmi}", returnStdout: true).trim()
-                            assert sourceAmiId
-                            echo "The latest ami source id is: ${sourceAmiId}"
-                        }
+                    withAWSCli() {
+                        sourceAmiId = sh(script: "${findLatestAmi}", returnStdout: true).trim()
+                        assert sourceAmiId
+                        echo "The latest ami source id is: ${sourceAmiId}"
                     }
                 }
             }
