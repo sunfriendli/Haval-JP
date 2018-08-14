@@ -11,6 +11,6 @@ def call(String name, Closure body) {
     sh 'pip3 install awscli --user'
     sh 'find ~/.local/bin -name aws'
     withEnv(['MYTOOL_HOME=/home/sunfriendli/.local/bin']) {
-        sh './aws --version'
+        sh '$MYTOOL_HOME/./aws --version'
     }
 }
