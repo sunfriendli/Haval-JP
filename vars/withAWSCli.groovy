@@ -8,9 +8,11 @@ def call(String name, Closure body) {
     //echo "awscli groovy"
     //println(this.region)
     //this.sourceAmiId = "test"
-    sh 'pip3 install awscli --user'
-    sh 'find ~/.local/bin -name aws'
-    withEnv(['MYTOOL_HOME=/home/sunfriendli/.local/bin']) {
-        sh '.$MYTOOL_HOME/aws --version'
-    }
+    //sh 'pip3 install awscli --user'
+    //sh 'find ~/.local/bin -name aws'
+    //withEnv(['MYTOOL_HOME=/home/sunfriendli/.local/bin']) {
+    //    sh '.$MYTOOL_HOME/aws --version'
+    //}
+    def mapProperties = body.getProperties()
+    println(mapProperties)
 }
