@@ -1,15 +1,56 @@
 #!/usr/bin/env groovy
 
-echo("hello jenkins pipeline world!!!")
+def generateAmiName(String sourceAMIName) {
+    def dateTime = sourceAMIName.substring(sourceAMIName.length() - 8)
+    def name = "base-ubuntu-bionic-18.04-amd64-server-" + dateTime
+    return name
+}
+
+def formatAMIName(String name) {
+    name = name.substring(name.length() - 8)
+    println(name)
+}
+
+def filterParams = [
+    'architecture' : 'x86_64',
+    'image-type' : 'machine',
+    'owner-id' : '837727238323',
+    'state' : 'available',
+    'name' : '*ubuntu*hvm-ssd*bionic*18.04*amd64*',
+    'ena-support' : 'true',
+    'root-device-type' : 'ebs',
+    'virtualization-type' : 'hvm',
+]
+
+def sourceAmiId = null
+def region = "cn-north-1"
+def awsHome = '~/.local/bin'
 
 pipeline {
     agent any
-
+    
     stages {
-        stage('test install') {
+        stage('Get latest ami id') {
             steps {
                 script {
-                    sh "pip3 install awscli"
+                    def conf = createAMIWithPacker.loadConf()
+                    def packerCredential = createAMIWithPacker.getPackerCredential(conf, region)
+                    assert packerCredential
+
+                    withAWS(credentials: packerCredential, region: region) {
+                        def findLatestAmi = '~/.local/bin/./aws ec2 describe-images --filters'
+                        filterParams.each {
+                            k, v -> findLatestAmi = "${findLatestAmi} \"Name=${k},Values=${v}\" "
+                        }
+                        findLatestAmi= "${findLatestAmi} --query \'Images[*].[ImageId,CreationDate]\' --output text | sort -k2 -r | head -n1 | cut -f 1"
+                        echo "Filters: ${findLatestAmi}"
+
+                        withAWSCli() {
+                            sourceAmiId = sh(script: "${findLatestAmi}", returnStdout: true).trim()
+                            assert sourceAmiId
+                            echo "The latest ami source id is: ${sourceAmiId}"
+                        }
+                    }
                 }
             }
         }
