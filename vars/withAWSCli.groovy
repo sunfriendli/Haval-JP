@@ -4,8 +4,12 @@ def call(String name, Closure body) {
     //sh 'pip3 install awscli --user'
     //sh 'export PATH=~/.local/bin:$PATH;cmd'
     //sourceAmiId = sh(script: "${findLatestAmi}", returnStdout: true).trim()
-    println(name)
-    echo "awscli groovy"
-    println(this.region)
-    this.sourceAmiId = "test"
+    //println(name)
+    //echo "awscli groovy"
+    //println(this.region)
+    //this.sourceAmiId = "test"
+    sh 'pip3 install awscli --user'
+    withEnv(['MYTOOL_HOME=~/.local/bin']) {
+        sh './$MYTOOL_HOME/aws'
+    }
 }
