@@ -9,7 +9,6 @@ pipeline {
         stage('test install') {
             steps {
                 script {
-                    sh "apt-get -y install python3-pip"
                     sh "pip3 install awscli"
                 }
             }
