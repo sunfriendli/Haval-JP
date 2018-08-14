@@ -9,7 +9,8 @@ def call(String name, Closure body) {
     //println(this.region)
     //this.sourceAmiId = "test"
     sh 'pip3 install awscli --user'
+    sh 'find ~/.local/bin -name aws'
     withEnv(['MYTOOL_HOME=~/.local/bin']) {
-        sh './$MYTOOL_HOME/aws'
+        sh 'aws --version'
     }
 }
