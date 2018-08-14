@@ -9,8 +9,8 @@ pipeline {
         stage('test install') {
             steps {
                 script {
-                    sh "sudo apt-get -y install python-pip"
-                    sh "sudo pip install --retries=20 --timeout=3000 awscli"
+                    sh "apt-get -y install python3-pip"
+                    sh "pip3 install awscli"
                 }
             }
         }
