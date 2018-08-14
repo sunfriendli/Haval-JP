@@ -44,7 +44,7 @@ pipeline {
                     findLatestAmi= "${findLatestAmi} --query \'Images[*].[ImageId,CreationDate]\' --output text | sort -k2 -r | head -n1 | cut -f 1"
                     echo "Filters: ${findLatestAmi}"
 
-                    withAWSCli(findLatestAmi, sourceAmiId) {
+                    withAWSCli(findLatestAmi) {
                         echo "The latest ami source id is: ${sourceAmiId}"
                         //sourceAmiId = sh(script: "${findLatestAmi}", returnStdout: true).trim()
                         //assert sourceAmiId
