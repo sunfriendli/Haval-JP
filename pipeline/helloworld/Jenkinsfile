@@ -45,7 +45,7 @@ pipeline {
                     echo "Filters: ${findLatestAmi}"
 
                     def test = 'aws --version'
-                    withAWSCli(test) {
+                    withAWSCli(findLatestAmi) {
                         
                         //echo "The latest ami source id is: ${sourceAmiId}"
 
