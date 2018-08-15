@@ -55,6 +55,10 @@ pipeline {
                     println result
                     assert result
                     String[] resultArr = result.split("\\s+")
+                    println resultArr[0]
+                    println resultArr[1]
+                    println resultArr[2]
+                    
                     sourceAmiId resultArr[0]
                     echo "The latest ami source id is: ${sourceAmiId}"
 
