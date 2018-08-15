@@ -37,7 +37,7 @@ pipeline {
                     def packerCredential = createAMIWithPacker.getPackerCredential(conf, region)
                     assert packerCredential
 
-                    def findLatestAmi = '~/.local/bin/./aws ec2 describe-images --filters'
+                    def findLatestAmi = 'aws ec2 describe-images --region cn-north-1 --filters'
                     filterParams.each {
                         k, v -> findLatestAmi = "${findLatestAmi} \"Name=${k},Values=${v}\" "
                     }
