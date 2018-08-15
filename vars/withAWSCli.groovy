@@ -6,9 +6,9 @@ def call(String param, Closure body) {
     def command = "PATH=$PATH:$HOME/.local/bin;" + param
     println command
     if (body == null) {
-        body.call(command)
-    } else {
         sh command
+    } else {
+        body.call(command)
     }
 
     //println test
