@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-def call(String name, Closure body) {
+def call(Closure body) {
     //println "delegate:" + body.delegate.class.name
     //println "owner: " + body.owner.class.name
 
