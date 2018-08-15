@@ -46,11 +46,8 @@ pipeline {
 
                     def test = 'aws --version'
                     withAWSCli() {
-                        aws --version
-                        aws --version
-                        aws --version
+                        sourceAmiId = sh(script: "${param}", returnStdout: true).trim()
                         //echo "The latest ami source id is: ${sourceAmiId}"
-                        //param ->(sourceAmiId = sh(script: "${param}", returnStdout: true).trim())
 
                         //assert sourceAmiId
                         //echo "The latest ami source id is: ${sourceAmiId}"
