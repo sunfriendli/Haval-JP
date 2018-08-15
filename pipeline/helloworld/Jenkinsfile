@@ -48,7 +48,7 @@ pipeline {
                     //withAWSCli(test, false) {}
                     withAWSCli() {
                         def result = "ami-ac0dd5c1    ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20180806 2018-08-09T19:13:56.000Z"
-                        String[] resultArr = result.split(' ')
+                        String[] resultArr = result.split("\\s+")
                         println resultArr[0]
                         println resultArr[1]
                         //sourceAmiId = sh(script: findLatestAmi, returnStdout: true).trim()
