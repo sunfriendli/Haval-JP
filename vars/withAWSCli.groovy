@@ -1,12 +1,16 @@
 #!/usr/bin/env groovy
 
-def call(String test, Closure body) {
+def call(String param, Closure body) {
 
-    //def cmd = "PATH=$PATH:/home/lisi/.local/bin;" + cmd1
-    //println cmd
-    //body.call(cmd)
-
-    println test
     sh 'pip3 install awscli --user'
-    withEnv(["PATH+AWSCLI=/home/lisi/.local/bin"], body)
+    def command = "PATH=$PATH:$HOME/.local/bin;" + param
+    println command
+    if body {
+        body.call(command)
+    } else {
+        sh command
+    }
+
+    //println test
+    //withEnv(["PATH+AWSCLI=/home/lisi/.local/bin"], body)
 }
