@@ -58,8 +58,8 @@ pipeline {
                     println resultArr[0]
                     println resultArr[1]
                     println resultArr[2]
-                    
-                    sourceAmiId resultArr[0]
+
+                    sourceAmiId = resultArr[0]
                     echo "The latest ami source id is: ${sourceAmiId}"
 
                     def sourceAmiName = resultArr[2]
