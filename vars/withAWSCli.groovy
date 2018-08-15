@@ -1,9 +1,8 @@
 #!/usr/bin/env groovy
 
-def call(Closure body) {
-    //println "delegate:" + body.delegate.class.name
-    //println "owner: " + body.owner.class.name
+def call(String cmd1, Closure body) {
 
-    def mapProperties = body.getProperties()
-    println(mapProperties)
+    def cmd = "PATH=$PATH:$HOME/.local/bin;" + cmd1
+    println cmd
+    body.call(cmd)
 }
