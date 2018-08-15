@@ -12,6 +12,12 @@ def formatAMIName(String name) {
     println(name)
 }
 
+def getAMIGenerateDate(String name) {
+    name = name.substring(name.length() - 8)
+    println(name)
+    return name
+}
+
 def filterParams = [
     'architecture' : 'x86_64',
     'image-type' : 'machine',
@@ -45,18 +51,17 @@ pipeline {
                     findLatestAmi= "${findLatestAmi} --query \'Images[*].[ImageId,CreationDate]\' --output text | sort -k2 -r | head -n1 | cut -f 1"
                     echo "Filters: ${findLatestAmi}"
 
-                        def result = "ami-ac0dd5c1    ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20180806 2018-08-09T19:13:56.000Z"
-                        assert result
-                            String[] resultArr = result.split("\\s+")
-                            sourceAmiId resultArr[0]
-                            echo "The latest ami source id is: ${sourceAmiId}"
-
-                            def sourceAmiName = resultArr[2]
-                            def generateDate = getAMIGenerateDate(sourceAmiName)
-                            def searchName = baseAMINamePre + generateDate
-                            echo "Check if there have a ami with name: ${searchName}"
-
+                    def result = "ami-ac0dd5c1    ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20180806 2018-08-09T19:13:56.000Z"
+                    assert result
+                    String[] resultArr = result.split("\\s+")
+                    sourceAmiId resultArr[0]
                     echo "The latest ami source id is: ${sourceAmiId}"
+
+                    //def sourceAmiName = resultArr[2]
+                    //def generateDate = getAMIGenerateDate(sourceAmiName)
+                    //def searchName = baseAMINamePre + generateDate
+                    //echo "Check if there have a ami with name: ${searchName}"
+
                 }
             }
         }
