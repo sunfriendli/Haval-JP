@@ -47,10 +47,10 @@ pipeline {
                     //def test = 'aws --version'
                     //withAWSCli(test, false) {}
                     withAWSCli() {
-                        //sh 'aws --version'
-                        //sh 'aws --version'
-                        //sh 'aws --version'
-                        sourceAmiId = sh(script: findLatestAmi, returnStdout: true).trim()
+                        sh 'aws --version'
+                        sh 'aws --version'
+                        sh 'aws --version'
+                        //sourceAmiId = sh(script: findLatestAmi, returnStdout: true).trim()
                         //echo "The latest ami source id is: ${sourceAmiId}"
                         //assert sourceAmiId
                         //echo "The latest ami source id is: ${sourceAmiId}"
