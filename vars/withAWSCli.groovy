@@ -12,5 +12,7 @@ def call(Closure body) {
     // }
 
     sh 'pip3 install --user boto3'
-    withEnv(['PATH+AWSCLI=~/.local/bin'], body)
+    //withEnv(['PATH+AWSCLI=~/.local/bin'], body)
+    withEnv(['PATH+AWSCLI=/home/lisi/.local/bin'], body)
+    
 }
