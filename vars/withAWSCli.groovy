@@ -5,7 +5,7 @@ def call(String param, Closure body) {
     sh 'pip3 install awscli --user'
     def command = "PATH=$PATH:$HOME/.local/bin;" + param
     println command
-    if body {
+    if (body == null) {
         body.call(command)
     } else {
         sh command
