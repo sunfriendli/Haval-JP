@@ -1,8 +1,9 @@
 #!/usr/bin/env groovy
 
+def baseAMINamePre = "base-ubuntu-bionic-18.04-amd64-server-"
 def generateAmiName(String sourceAMIName) {
     def dateTime = sourceAMIName.substring(sourceAMIName.length() - 8)
-    def name = "base-ubuntu-bionic-18.04-amd64-server-" + dateTime
+    def name = baseAMINamePre + dateTime
     return name
 }
 
@@ -48,9 +49,18 @@ pipeline {
                     //withAWSCli(test, false) {}
                     withAWSCli() {
                         def result = "ami-ac0dd5c1    ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20180806 2018-08-09T19:13:56.000Z"
-                        String[] resultArr = result.split("\\s+")
-                        println resultArr[0]
-                        println resultArr[1]
+                        assert result
+                            String[] resultArr = result.split("\\s+")
+                            sourceAmiId resultArr[0]
+                            echo "The latest ami source id is: ${sourceAmiId}"
+
+                            def sourceAmiName = resultArr[2]
+                            def generateDate = getAMIGenerateDate(sourceAmiName)
+                            def searchName = baseAMINamePre + generateDate
+                            echo "Check if there have a ami with name: ${searchName}"
+
+                            //def checkAMIID = 'aws ec2 describe-images --filters \'Name=is-public,Values=true\' \'Name=name, Values=${searchName}\''
+                            //echo checkAMIID == null
                         //sourceAmiId = sh(script: findLatestAmi, returnStdout: true).trim()
                         //echo "The latest ami source id is: ${sourceAmiId}"
                         //assert sourceAmiId
