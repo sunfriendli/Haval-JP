@@ -5,7 +5,7 @@ def call(String fileName, String job, List parents) {
     def yaml = readYaml file: fileName
     parents.each { yaml = yaml[it] }
     yaml = yaml[job]
-    yaml = yaml.remove('children')
+    yaml.remove('children')
     println yaml
     return yaml
 }
