@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     dir (GAME_BUILD_SCRIPT_DIR) {
-                        getNextBuildJob("config.yml", "[${params.BUILD_JOB}]")
+                        getNextBuildJob("config.yml", params.BUILD_JOB.split(',').collect {it.trim()})
                     }
                 }
             }
