@@ -1,27 +1,27 @@
-base:
-    name:base-name
-    id:base-id
-    sourceId:base-sourceId
-    sourceRelease:base-source-release
-    children:
-        saltmaster:
-            name:saltmaster-name
-            id:saltmaster-id
-            sourceId:saltmaster-sourceId
-            sourceRelease:saltmaster-source-release
-            children:
-                test1:
-                    name:test1-name
-                    id:test1-id
-                    sourceId:test1-sourceId
-                    sourceRelease:test1-source-release
-                test2:
-                    name:test2-name
-                    id:test2-id
-                    sourceId:test2-sourceId
-                    sourceRelease:test2-source-release
-        filebeat:
-            name:filebeat-name
-            id:filebeat-id
-            sourceId:filebeat-sourceId
-            sourceRelease:filebeat-source-release
+base: 
+    name: base-name
+    id: base-id
+    sourceId: base-sourceId
+    sourceRelease: base-source-release
+    children: 
+     saltmaster: 
+            name: saltmaster-name
+            id: saltmaster-id
+            sourceId: saltmaster-sourceId
+            sourceRelease: saltmaster-source-release
+            children: 
+                test1:  
+                    name: test1-name
+                    id: test1-id
+                    sourceId: test1-sourceId
+                    sourceRelease: test1-source-release
+                test2: 
+                    name: test2-name
+                    id: test2-id
+                    sourceId: test2-sourceId
+                    sourceRelease: test2-source-release
+     filebeat: 
+            name: filebeat-name
+            id: filebeat-id
+            sourceId: filebeat-sourceId
+            sourceRelease: filebeat-source-release
