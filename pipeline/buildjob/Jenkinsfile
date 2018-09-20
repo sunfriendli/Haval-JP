@@ -3,6 +3,11 @@
 pipeline {
     agent any
 
+    parameters {
+        choice(name: 'BUILD_JOB',
+        choices: getBuildJobChoices(),
+        description: 'The name of build job.')
+    }
     environment {
         GAME_BUILD_SCRIPT_DIR = "${env.WORKSPACE}/pipeline/buildjob"
     }
@@ -11,7 +16,7 @@ pipeline {
             steps {
                 script {
                     dir (GAME_BUILD_SCRIPT_DIR) {
-                        getNextBuildJob("config.yml", "test2", ['base','saltmaster'])
+                        getNextBuildJob("config.yml", "[${params.BUILD_JOB}]")
                     }
                 }
             }
