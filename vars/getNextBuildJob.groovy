@@ -6,6 +6,8 @@ def call(String fileName, List job) {
     if (job != null && job.size() > 1) {
         yaml = yaml[job.remove(0)]
         job.each { yaml = yaml['children'][it] }
+    } else {
+        yaml = yaml[job.get(0)]
     }
 
     def parameters = []
