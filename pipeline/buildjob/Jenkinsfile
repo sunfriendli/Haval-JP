@@ -7,7 +7,8 @@ pipeline {
         stage('Find Latest Ubuntu') {
             steps {
                 script {
-                    getNextBulildJob("config.yml", "base", [])
+                    println env.WORKSPACE
+                    getNextBuildJob("config.yml", "base", [])
                 }
             }
         }
