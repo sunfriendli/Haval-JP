@@ -11,8 +11,6 @@ pipeline {
             steps {
                 script {
                     dir (GAME_BUILD_SCRIPT_DIR) {
-                        println env.WORKSPACE
-                        sh 'ls -a'
                         getNextBuildJob("config.yml", "base", [])
                     }
                 }
