@@ -3,12 +3,18 @@
 pipeline {
     agent any
 
+    environment {
+        GAME_BUILD_SCRIPT_DIR = "${env.WORKSPACE}/pipeline/buildjob"
+    }
     stages {
         stage('Find Latest Ubuntu') {
             steps {
                 script {
-                    println env.WORKSPACE
-                    getNextBuildJob("config.yml", "base", [])
+                    dir (GAME_BUILD_SCRIPT_DIR) {
+                        println env.WORKSPACE
+                        sh 'ls -a'
+                        getNextBuildJob("config.yml", "base", [])
+                    }
                 }
             }
         }
