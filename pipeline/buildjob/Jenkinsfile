@@ -1,0 +1,15 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Find Latest Ubuntu') {
+            steps {
+                script {
+                    getNextBulildJob("config.yml", "base", [])
+                }
+            }
+        }
+    }
+}

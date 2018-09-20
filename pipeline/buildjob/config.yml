@@ -1,0 +1,27 @@
+base:
+    name:
+    id:
+    sourceId:
+    sourceRelease:
+    children:
+        saltmaster:
+            name:
+            id:
+            sourceId:
+            sourceRelease:
+            children:
+                test1:
+                    name:
+                    id:
+                    sourceId:
+                    sourceRelease:
+                test2:
+                    name:
+                    id:
+                    sourceId:
+                    sourceRelease:
+        filebeat:
+            name:
+            id:
+            sourceId:
+            sourceRelease:
