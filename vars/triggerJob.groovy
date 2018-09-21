@@ -5,7 +5,7 @@ def getBuildParameters(def yaml) {
     yaml.each {
         k, v -> 
         if (k != 'children') {
-            parameters.add("string(name: ${k}, value: ${v}),")
+            parameters.add(string(name: ${k}, value: ${v}))
         }
     }
     return parameters
