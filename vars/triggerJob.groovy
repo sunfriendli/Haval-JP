@@ -14,7 +14,7 @@ def getBuildParameters(def yaml) {
 def buildJob(def name, def yaml) {
     yaml = yaml[name]
     build(job: name, wait: true, propagate: true, parameters: getBuildParameters(yaml))
-    if (yaml.containkey('children')) {
+    if (yaml.containkey('''children''')) {
         yaml = yaml['children']
         yaml.each {
             k, v ->
