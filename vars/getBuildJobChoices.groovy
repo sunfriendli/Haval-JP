@@ -4,11 +4,7 @@
 
 def call() {
     def choices = [
-        'base',
-        'base,saltmaster',
-        'base,filebeat',
-        'base,saltmaster,test1',
-        'base,saltmaster,test2',
+        'base'
     ]
     return choices.join('\n')
 }

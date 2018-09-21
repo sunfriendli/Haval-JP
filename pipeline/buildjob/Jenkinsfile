@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     dir (GAME_BUILD_SCRIPT_DIR) {
-                        triggerJob root: 'base', file: 'config.yml'
+                        triggerJob root: params.BUILD_JOB, file: 'config.yml'
                     }
                 }
             }

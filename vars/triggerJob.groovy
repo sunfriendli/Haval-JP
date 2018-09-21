@@ -12,13 +12,11 @@ def getBuildParameters(def yaml) {
 }
 
 def buildJob(def name, def yaml) {
-    yaml = yaml[name]
     build(job: name, wait: true, propagate: true, parameters: getBuildParameters(yaml))
     if (yaml.containsKey('children')) {
         yaml = yaml['children']
         yaml.each {
-            k, v ->
-                buildJob(k, v) 
+            k, v -> buildJob(k, v) 
         }
     }
 }
@@ -31,5 +29,5 @@ def call(Map m = [:]) {
     assert file
     
     def yaml = readYaml file: file
-    buildJob(root, yaml)
+    buildJob(root, yaml[root])
 }
