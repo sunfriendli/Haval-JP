@@ -17,6 +17,7 @@ def buildJob(def yaml, def dynamicParams) {
         v = dynamicParams == null ? v : v + dynamicParams
         println k
         buildresult = build(job: k, wait: true, propagate: true, parameters: getBuildParameters(v))
+        dynamicParams['source_ami'] = readFile file: "${env.WORKSPACE}/${k}-ami.txt"
         if (v.containsKey('children')) {
             buildJob(v['children'], dynamicParams)    
         }
@@ -26,13 +27,19 @@ def buildJob(def yaml, def dynamicParams) {
 def call(Map m = [:]) {
 
     def file = m.get('file', '')
-    def file = m.get('source_ami', '')
-    def file = m.get('source_ami_release', '')
+    def sourceAmi = m.get('source_ami', '')
+    def sourceAmiRelease = m.get('source_ami_release', '')
         
     assert file
+    assert sourceAmi
+    assert sourceAmiRelease
     
     def yaml = readYaml file: file
     assert yaml.size() == 1
+
+    def dynamicParams = [:]
+    dynamicParams['source_ami'] = sourceAmi
+    dynamicParams['source_ami_release'] = sourceAmiRelease
 
     buildJob(yaml, dynamicParams)
 }
