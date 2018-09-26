@@ -16,12 +16,12 @@ pipeline {
         stage('Find Latest Ubuntu') {
             steps {
                 script {
-                    dir (GAME_BUILD_SCRIPT_DIR) {
                         println env.WORKSPACE
                         def stdout = sh(script: 'ls', returnStdout: true).trim()
                         println stdout
-                        //triggerJob file: params.BUILD_JOB_FILE
-                    }
+                    //   triggerJob file: params.BUILD_JOB_FILE
+                    //dir (GAME_BUILD_SCRIPT_DIR) {
+                    //}
                 }
             }
         }
