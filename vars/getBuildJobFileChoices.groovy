@@ -4,7 +4,7 @@
 
 def call() {
     def choices = [
-        'base'
+        'config.yml'
     ]
     return choices.join('\n')
 }

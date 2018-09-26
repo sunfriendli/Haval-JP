@@ -4,19 +4,23 @@ pipeline {
     agent any
 
     parameters {
-        choice(name: 'BUILD_JOB',
-        choices: getBuildJobChoices(),
+        choice(name: 'BUILD_JOB_FILE',
+        choices: getBuildJobFileChoices(),
         description: 'The name of build job.')
     }
     environment {
         GAME_BUILD_SCRIPT_DIR = "${env.WORKSPACE}/pipeline/buildjob"
     }
+
     stages {
         stage('Find Latest Ubuntu') {
             steps {
                 script {
                     dir (GAME_BUILD_SCRIPT_DIR) {
-                        triggerJob root: params.BUILD_JOB, file: 'config.yml'
+                        println env.WORKSPACE
+                        def stdout = sh(script: 'ls', returnStdout: true).trim()
+                        println stdout
+                        //triggerJob file: params.BUILD_JOB_FILE
                     }
                 }
             }

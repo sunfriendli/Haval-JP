@@ -11,23 +11,28 @@ def getBuildParameters(def yaml) {
     return parameters
 }
 
-def buildJob(def name, def yaml) {
-    build(job: name, wait: true, propagate: true, parameters: getBuildParameters(yaml))
-    if (yaml.containsKey('children')) {
-        yaml = yaml['children']
-        yaml.each {
-            k, v -> buildJob(k, v) 
+def buildJob(def yaml, def dynamicParams) {
+    yaml.each {
+        k, v ->
+        v = dynamicParams == null ? v : v + dynamicParams
+        println k
+        buildresult = build(job: k, wait: true, propagate: true, parameters: getBuildParameters(v))
+        if (v.containsKey('children')) {
+            buildJob(v['children'], dynamicParams)    
         }
     }
 }
 
 def call(Map m = [:]) {
-    def root = m.get('root', '')
-    def file = m.get('file', '')
 
-    assert root
+    def file = m.get('file', '')
+    def file = m.get('source_ami', '')
+    def file = m.get('source_ami_release', '')
+        
     assert file
     
     def yaml = readYaml file: file
-    buildJob(root, yaml[root])
+    assert yaml.size() == 1
+
+    buildJob(yaml, dynamicParams)
 }
