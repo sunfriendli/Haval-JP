@@ -17,7 +17,8 @@ def buildJob(def yaml, def dynamicParams) {
         v = dynamicParams == null ? v : v + dynamicParams
         println k
         buildresult = build(job: k, wait: true, propagate: true, parameters: getBuildParameters(v))
-        dynamicParams['source_ami'] = readFile file: "${env.WORKSPACE}/k/${k}-ami.txt"
+        def path = env.WORKSPACE.substring(0, env.WORKSPACE.lastIndexOf("/"))
+        dynamicParams['source_ami'] = readFile file: "${path}/${k}/${k}-ami.txt"
         if (v.containsKey('children')) {
             buildJob(v['children'], dynamicParams)    
         }
