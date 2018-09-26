@@ -1,0 +1,27 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent any
+    parameters {
+        string(name: 'name', description: 'Name of base.')
+        string(name: 'id', description: 'ID of base.')
+        string(name: 'sourceId', description: 'source id of base.')
+        string(name: 'sourceRelease', description: 'Source release of base.')
+    }
+    stages {
+        stage('Build Test') {
+            steps {
+                script {
+                    params.each {
+                        k, v ->
+                        println "key=${k}, value=${v}"
+                        println '===================================='
+                        
+                        def amiFilePath = "${env.WORKSPACE}/test2-ami.txt"
+                        writeFile encoding: 'UTF-8', file: amiFilePath, text: 'id-test2'
+                    }
+                }
+            }
+        }
+    }
+}
