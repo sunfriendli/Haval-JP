@@ -16,7 +16,9 @@ pipeline {
         stage('Find Latest Ubuntu') {
             steps {
                 script {
-                    triggerJob file: params.BUILD_JOB_FILE, source_ami: '12345566', source_ami_release: '20180926'
+                    dir (GAME_BUILD_SCRIPT_DIR) {
+                        triggerJob file: params.BUILD_JOB_FILE, source_ami: '12345566', source_ami_release: '20180926'
+                    }
                 }
             }
         }
