@@ -17,8 +17,8 @@ pipeline {
                         println "key=${k}, value=${v}"
                         println '===================================='
                         
-                        def amiFilePath = "${env.WORKSPACE}/base-ami.txt"
-                        writeFile encoding: 'UTF-8', file: amiFilePath, text: 'id-base'
+                        def amiFilePath = "${env.WORKSPACE}/test1-ami.txt"
+                        writeFile encoding: 'UTF-8', file: amiFilePath, text: 'id-test1'
                     }
                 }
             }

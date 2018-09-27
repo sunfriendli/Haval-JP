@@ -1,5 +1,22 @@
 #!/usr/bin/env groovy
 
+def getAmiName(def job) {
+    def jobName = getJobName(job)
+    return "ubuntu/18.04/${jobName}/${env.BUILD_DATE}-b${env.BUILD_NUMBER}"
+}
+
+def getJobName(def job) {
+    return job.substring(job.lastIndexOf("/") + 1, job.length())
+}
+
+def getJobResultFileName(def job) {
+    return getJobName(job) + "-ami.txt"
+}
+
+def getAmiFilePath(def job) {
+    return "${JENKINS_HOME}/workspace/" + job + "/" + getJobResultFileName(job)
+}
+
 def getBuildParameters(def yaml) {
     def parameters = []
     yaml.each {
@@ -14,12 +31,11 @@ def getBuildParameters(def yaml) {
 def buildJob(def yaml, def dynamicParams) {
     yaml.each {
         k, v ->
-        v = dynamicParams == null ? v : v + dynamicParams
-        println k
+        v = v + dynamicParams
         buildresult = build(job: k, wait: true, propagate: true, parameters: getBuildParameters(v))
-        def path = env.WORKSPACE.substring(0, env.WORKSPACE.lastIndexOf("/"))
-        dynamicParams['source_ami'] = readFile file: "${path}/${k}/${k}-ami.txt"
         if (v.containsKey('children')) {
+            dynamicParams['source_ami'] = readFile file: getAmiFilePath(k)
+            dynamicParams['ami_name'] = getAmiName()
             buildJob(v['children'], dynamicParams)    
         }
     }
@@ -28,19 +44,13 @@ def buildJob(def yaml, def dynamicParams) {
 def call(Map m = [:]) {
 
     def file = m.get('file', '')
-    def sourceAmi = m.get('source_ami', '')
-    def sourceAmiRelease = m.get('source_ami_release', '')
+    def paramMap = m.get('paramMap', '')
         
     assert file
-    assert sourceAmi
-    assert sourceAmiRelease
+    assert paramMap
     
     def yaml = readYaml file: file
     assert yaml.size() == 1
 
-    def dynamicParams = [:]
-    dynamicParams['source_ami'] = sourceAmi
-    dynamicParams['source_ami_release'] = sourceAmiRelease
-
-    buildJob(yaml, dynamicParams)
+    buildJob(yaml, paramMap)
 }
