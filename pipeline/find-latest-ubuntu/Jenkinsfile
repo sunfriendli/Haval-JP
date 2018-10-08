@@ -45,9 +45,6 @@ pipeline {
         ansiColor('xterm')
     }
     parameters {
-        choice(name: 'BUILD_AMI_JOB', 
-            choices: getAMIJobChoices(), 
-            description: 'Full name of the job which builds new AMI based on latest ubuntu AMI.')
         booleanParam(name: 'FORCE',
             defaultValue: false,
             description: 'When checked, will force build AMI no matter whether an AMI used to be built based on the latest ubuntu.')
