@@ -50,7 +50,7 @@ pipeline {
             description: 'When checked, will force build AMI no matter whether an AMI used to be built based on the latest ubuntu.')
     }
     environment {
-        PIPELINE_DIR = "${env.WORKSPACE}/pipeline/ops/aws/ami/find-latest-ubuntu"
+        PIPELINE_DIR = "${env.WORKSPACE}/pipeline/find-latest-ubuntu"
     }
     stages {
         stage('Find Latest Ubuntu') {
