@@ -1,0 +1,103 @@
+#!/usr/bin/env groovy
+
+UBUNTU_AMI_OPTS = [
+    'zone': 'cn-north-1',
+    'name': 'bionic',
+    'version': '18.04 LTS',
+    'arch': 'amd64',
+    'instanceType': 'hvm:ebs-ssd'
+]
+
+UBUNTU_AMI_FILE_NAME = 'latest-ubuntu.json'
+TIMEZONE = 'Asia/Shanghai'
+
+def latestUbuntuAMI = null
+def shouldCreateAMI = true
+
+def getAMIName() {
+    return "ubuntu/18.04/base/${env.BUILD_DATE}-b${env.BUILD_NUMBER}"
+}
+
+def determineShouldCreateAMI(artifactName, latestAMI) {
+    try {
+        copyArtifacts filter: artifactName, projectName: env.JOB_NAME, selector: lastSuccessful()
+    } catch (ex) {
+        return true
+    }
+    def lastSuccessfulAMI = readJSON file: artifactName
+    return lastSuccessfulAMI.id != latestAMI.id
+}
+
+pipeline {
+    agent {
+        label 'os:linux'
+    }
+    triggers {
+        // Daily at 1:30 AM
+        cron '30 1 * * *'
+    }
+    options {
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(
+            daysToKeepStr: '15',
+            artifactNumToKeepStr: '20'
+        ))
+        ansiColor('xterm')
+    }
+    parameters {
+        choice(name: 'BUILD_AMI_JOB', 
+            choices: getAMIJobChoices(), 
+            description: 'Full name of the job which builds new AMI based on latest ubuntu AMI.')
+        booleanParam(name: 'FORCE',
+            defaultValue: false,
+            description: 'When checked, will force build AMI no matter whether an AMI used to be built based on the latest ubuntu.')
+    }
+    environment {
+        PIPELINE_DIR = "${env.WORKSPACE}/pipeline/ops/aws/ami/find-latest-ubuntu"
+    }
+    stages {
+        stage('Find Latest Ubuntu') {
+            steps {
+                script {
+                    latestUbuntuAMI = findLatestUbuntuAMI(UBUNTU_AMI_OPTS)
+                    assert latestUbuntuAMI
+                }
+            }
+        }
+        stage('Check AMI') {
+            when {
+                not { expression { return params.FORCE } }
+            }
+            steps {
+                script {
+                    shouldCreateAMI = determineShouldCreateAMI(UBUNTU_AMI_FILE_NAME, latestUbuntuAMI)
+                }
+            }
+        }
+        stage('Create AMI') {
+            when {
+                expression { return shouldCreateAMI }
+            }
+            steps {
+                script {
+                    dir(PIPELINE_DIR) {
+                        def map = [:]
+                        map['region'] = latestUbuntuAMI.zone
+                        map['ami_name'] = getAMIName()
+                        map['source_ami'] = latestUbuntuAMI.id
+                        map['source_ami_release'] = latestUbuntuAMI.release
+                        map['tag_os_version'] = latestUbuntuAMI.version
+                        map['timezone'] = TIMEZONE
+                        buildAmiByYml(map)
+                    }
+                }
+            }
+        }
+        stage('Archive Latest Ubuntu') {
+            steps {
+                writeJson file: UBUNTU_AMI_FILE_NAME, object: latestUbuntuAMI, pretty: true
+                archiveArtifacts artifacts: UBUNTU_AMI_FILE_NAME, onlyIfSuccessful: true
+            }
+        }
+    }
+}

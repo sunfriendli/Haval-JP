@@ -14,7 +14,7 @@ def getJobResultFileName(def job) {
 }
 
 def getAmiFilePath(def job) {
-    return "${JENKINS_HOME}/workspace/" + job + "/" + getJobResultFileName(job)
+    return "${JENKINS_HOME}/workspace/" + job + "/aws-ami/" + getJobResultFileName(job)
 }
 
 def getBuildParameters(def yaml) {
