@@ -90,5 +90,11 @@ pipeline {
                 }
             }
         }
+        stage('Archive Latest Ubuntu') {
+            steps {
+                writeJson file: UBUNTU_AMI_FILE_NAME, object: latestUbuntuAMI, pretty: true
+                archiveArtifacts artifacts: UBUNTU_AMI_FILE_NAME, onlyIfSuccessful: true
+            }
+        }
     }
 }
